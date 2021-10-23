@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Figure;
 import models.Game;
+import models.Settings;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -32,10 +33,6 @@ public class GameWindowController {
 
     private final int blockSize = 20;
 
-    private Color blockColor = Color.GRAY;
-
-    private Color figureColor = Color.LIGHT_GRAY;
-
     private Scene scene;
 
     private Game game = new Game();
@@ -43,6 +40,8 @@ public class GameWindowController {
     private BufferedImage image;
 
     private BufferedImage preview;
+
+    private Settings settings;
 
     private static BufferedImage createImage (int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
@@ -53,7 +52,8 @@ public class GameWindowController {
         return image;
     }
 
-    public void init(Stage stage) {
+    public void init(Stage stage, Settings settings) {
+        this.settings=settings;
         image = createImage( blockSize* game.getField().width, blockSize* game.getField().height, Color.black);
         preview = createImage( blockSize* previewSize, blockSize* previewSize, Color.black);
         redraw();
@@ -68,7 +68,7 @@ public class GameWindowController {
         }
         for (var x=0; x< game.getField().width; x++){
             for (var y=0; y< game.getField().height; y++){
-                drawBlock(x,y, game.getField().getBlock(x, y),blockColor);
+                drawBlock(x,y, game.getField().getBlock(x, y),settings.getBlockColor());
             }
         }
         drawFigure(game.getCurrentFigure());
@@ -86,7 +86,7 @@ public class GameWindowController {
         }
         for(var y=0; y<game.getNextFigure().getHeight(); y++){
             for (var x=0; x<game.getNextFigure().getWidth(); x++){
-                drawBlock(x+dx, y+dy, game.getNextFigure().getBlock(x,y),figureColor);
+                drawBlock(x+dx, y+dy, game.getNextFigure().getBlock(x,y),settings.getFigureColor());
             }
         }
         _preview.setImage(SwingFXUtils.toFXImage(preview, null));
@@ -102,7 +102,7 @@ public class GameWindowController {
     private void drawFigure(Figure figure){
         for(var y=0; y<figure.getHeight(); y++){
             for (var x=0; x<figure.getWidth(); x++){
-                drawBlock(game.getFigureX()+x, game.getFigureY()+y, figure.getBlock(x,y),figureColor);
+                drawBlock(game.getFigureX()+x, game.getFigureY()+y, figure.getBlock(x,y),settings.getFigureColor());
             }
         }
     }
@@ -128,7 +128,7 @@ public class GameWindowController {
         });
         Timeline timeline = new Timeline(
                 new KeyFrame(
-                        Duration.seconds(1),
+                        Duration.seconds(settings.getTimerDuration()),
                         ae -> {
                             game.moveDown();
                             redraw();
@@ -137,7 +137,7 @@ public class GameWindowController {
                         }
                 )
         );
-        timeline.setDelay(Duration.seconds(1));
+        timeline.setDelay(Duration.seconds(settings.getTimerDuration()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }

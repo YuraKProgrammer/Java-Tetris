@@ -5,7 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
+import models.Settings;
 import windows.GameWindowController;
 
 import java.io.IOException;
@@ -14,6 +17,14 @@ import java.util.Objects;
 public class Controller {
     @FXML
     private Button _start;
+    @FXML
+    private RadioButton _speed05;
+    @FXML
+    private RadioButton _speed1;
+    @FXML
+    private RadioButton _speed2;
+
+    Settings settings = new Settings();
 
     private Scene scene;
     public void setScene(Scene scene) {
@@ -38,7 +49,13 @@ public class Controller {
         stage.show();
 
         var controller = loader.<GameWindowController>getController();
-        controller.init(stage);
+        if (_speed05.isSelected())
+            settings.setTimerDuration(0.5);
+        if (_speed1.isSelected())
+            settings.setTimerDuration(1);
+        if (_speed2.isSelected())
+            settings.setTimerDuration(2);
+        controller.init(stage,settings);
         controller.setScene(stage.getScene());
     }
 }
