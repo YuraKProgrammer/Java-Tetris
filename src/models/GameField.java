@@ -15,6 +15,16 @@ public class GameField {
 
     public int score = 0;
 
+    public boolean isGameOn() {
+        return isGameOn;
+    }
+
+    public void setGameOn(boolean gameOn) {
+        isGameOn = gameOn;
+    }
+
+    private boolean isGameOn = true;
+
     public GameField(){
     }
 
@@ -31,11 +41,13 @@ public class GameField {
     public boolean leftFree(Figure figure, int figureX, int figureY){
         for (var x=0; x<figure.getWidth(); x++){
             for (var y=0; y<figure.getHeight(); y++){
-                int y1 = y + figureY;
-                int x1 = x + figureX - 1;
-                if (x1 >=0) {
-                    if (getBlock(x1, y1))
-                        return false;
+                if (figure.getBlock(x, y)) {
+                    int y1 = y + figureY;
+                    int x1 = x + figureX - 1;
+                    if (x1 >= 0) {
+                        if (getBlock(x1, y1))
+                            return false;
+                    }
                 }
             }
         }
@@ -102,8 +114,7 @@ public class GameField {
     private void checkTop(){
         for (var x=0; x<width; x++){
             if (values[x][0]){
-                Exception e = new Exception("Игра закончена");
-                Main.showError(e);
+                isGameOn=false;
             }
         }
     }

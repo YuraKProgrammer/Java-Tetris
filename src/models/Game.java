@@ -2,6 +2,8 @@ package models;
 
 import sample.Main;
 
+import java.util.Random;
+
 public class Game {
     public GameField getField() {
         return field;
@@ -10,6 +12,8 @@ public class Game {
     public int getFigureX() {
         return figureX;
     }
+
+    private Random random = new Random();
 
     private int figureX;
 
@@ -21,9 +25,15 @@ public class Game {
 
     private GameField field = new GameField();
 
+    public void setCurrentFigure(Figure currentFigure) {
+        this.currentFigure = currentFigure;
+    }
+
     private Figure currentFigure;
 
     private Figure nextFigure;
+
+    private FigureRotator rotator = new FigureRotator();
 
     private FigureFabric fabric = new FigureFabric();
     public int getScore() {
@@ -38,7 +48,7 @@ public class Game {
 
     public Game(){
         currentFigure=fabric.create();
-        figureX=(field.width-currentFigure.getWidth())/2;
+        figureX=random.nextInt(field.width-currentFigure.getWidth()+1);
         nextFigure=fabric.create();
     }
 
@@ -76,87 +86,20 @@ public class Game {
     }
 
     public boolean rotate(){
-        var rotated = createRotatedFigure();
+        var rotated = rotator.rotate(currentFigure);
         if (figureX+rotated.getWidth()> field.width)
             return false;
         if (figureY+rotated.getHeight()>field.height)
             return false;
+        if (currentFigure.getHeight()==3 && currentFigure.getWidth()%2!=0 && figureX-1+rotated.getWidth()>-1 && currentFigure!=rotated) {
+            figureX = figureX - 1;
+            figureY = figureY + 1;
+        }
+        if (currentFigure.getWidth()==3 && currentFigure.getHeight()%2!=0 && figureX+1+rotated.getWidth()>-1 && currentFigure!=rotated) {
+            figureX = figureX + 1;
+            figureY = figureY - 1;
+        }
         currentFigure=rotated;
         return true;
-    }
-
-    private Figure createRotatedFigure(){
-        var cf = new boolean[3][3];
-        for (var x=0; x<currentFigure.getWidth(); x++){
-            for (var y=0; y<currentFigure.getHeight(); y++){
-                cf[x][y]=currentFigure.getBlock(x,y);
-            }
-        }
-        var rf = new boolean[3][3];
-        for (var x=0; x<3; x++) {
-            for (var y = 0; y<3; y++) {
-                rf[x][y]=cf[y][x]; //??????????????????????
-            }                                   // 1 1 0        1 1 1
-        }                                       // 1 0 0  --->  0 0 1
-        var x1=3-checkVoidX(rf);                // 1 0 0        0 0 0
-        var y1=3-checkVoidY(rf);
-        var blocks = new boolean[x1][y1];
-        for (var x=0; x<x1; x++){
-            for (var y=0; y<y1; y++){
-                blocks[x][y]=rf[x][y];
-            }
-        }
-        return new Figure(blocks);
-    }
-
-    private int checkVoidX(boolean[][] figure){
-        var k=0;
-        for(var x=0; x<3; x++){
-            for(var y=0; y<3; y++){
-                if(!figure[x][y])
-                    k++;
-                else
-                    k=0;
-            }
-            if (k==3) {
-                if (x == 0) {
-                    throw new RuntimeException();
-                }
-                if (x == 1) {
-                    return 2;
-                }
-                if (x == 2) {
-                    return 1;
-                }
-            }
-            if (k<3){
-                continue;
-            }
-        }
-        return 0;
-    }
-
-    private int checkVoidY(boolean[][] figure){
-        var k=0;
-        for(var y=0; y<3; y++){
-            for(var x=0; x<3; x++){
-                if(!figure[x][y])
-                    k++;
-                else
-                    k=0;
-            }
-            if (k==3) {
-                if (y == 0) {
-                    throw new RuntimeException();
-                }
-                if (y == 1) {
-                    return 2;
-                }
-                if (y == 2) {
-                    return 1;
-                }
-            }
-        }
-        return 0;
     }
 }

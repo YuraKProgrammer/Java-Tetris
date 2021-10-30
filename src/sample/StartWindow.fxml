@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane alignment="center" hgap="10" prefHeight="112.0" prefWidth="134.0" vgap="10" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="center" hgap="10" prefHeight="162.0" prefWidth="214.0" vgap="10" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <columnConstraints>
         <ColumnConstraints />
       <ColumnConstraints />
@@ -22,15 +22,32 @@
     </rowConstraints>
     <children>
         <Button fx:id="_start" mnemonicParsing="false" text="Start" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox prefHeight="71.0" prefWidth="135.0">
          <children>
-            <RadioButton fx:id="_speed2" mnemonicParsing="false" text="Медленно">
+            <RadioButton fx:id="_speed4" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Очень медленно">
                <toggleGroup>
                   <ToggleGroup fx:id="tg1" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="_speed1" mnemonicParsing="false" selected="true" text="Нормально" toggleGroup="$tg1" />
+            <RadioButton fx:id="_speed2" mnemonicParsing="false" text="Медленно" toggleGroup="$tg1" />
+            <RadioButton fx:id="_speed1" mnemonicParsing="false" prefHeight="18.0" prefWidth="98.0" selected="true" text="Нормально" toggleGroup="$tg1" />
             <RadioButton fx:id="_speed05" mnemonicParsing="false" text="Быстро" toggleGroup="$tg1" />
+            <RadioButton fx:id="_speed025" layoutX="10.0" layoutY="64.0" mnemonicParsing="false" text="Очень быстро" toggleGroup="$tg1" />
+            <RadioButton fx:id="_speed01" layoutX="10.0" layoutY="81.0" mnemonicParsing="false" text="Сумасшедшая скорость" toggleGroup="$tg1" />
+         </children>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+         <children>
+            <RadioButton fx:id="_bgBlack" mnemonicParsing="false" selected="true" text="Чёрный">
+               <toggleGroup>
+                  <ToggleGroup fx:id="tg2" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="_bgWhite" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Белый" toggleGroup="$tg2" />
+            <RadioButton fx:id="_bgRed" layoutX="10.0" layoutY="28.0" mnemonicParsing="false" text="Красный" toggleGroup="$tg2" />
+            <RadioButton fx:id="_bgBlue" layoutX="10.0" layoutY="45.0" mnemonicParsing="false" text="Синий" toggleGroup="$tg2" />
+            <RadioButton fx:id="_bgYellow" layoutX="10.0" layoutY="63.0" mnemonicParsing="false" text="Жёлтый" toggleGroup="$tg2" />
+            <RadioButton fx:id="_bgGreen" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" text="Зелёный" toggleGroup="$tg2" />
          </children>
       </VBox>
     </children>

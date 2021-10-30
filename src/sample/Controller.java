@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import models.Settings;
 import windows.GameWindowController;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -18,12 +19,29 @@ public class Controller {
     @FXML
     private Button _start;
     @FXML
+    private RadioButton _speed01;
+    @FXML
+    private RadioButton _speed025;
+    @FXML
     private RadioButton _speed05;
     @FXML
     private RadioButton _speed1;
     @FXML
     private RadioButton _speed2;
-
+    @FXML
+    private RadioButton _speed4;
+    @FXML
+    private RadioButton _bgBlack;
+    @FXML
+    private RadioButton _bgWhite;
+    @FXML
+    private RadioButton _bgRed;
+    @FXML
+    private RadioButton _bgBlue;
+    @FXML
+    private RadioButton _bgYellow;
+    @FXML
+    private RadioButton _bgGreen;
     Settings settings = new Settings();
 
     private Scene scene;
@@ -49,12 +67,30 @@ public class Controller {
         stage.show();
 
         var controller = loader.<GameWindowController>getController();
+        if (_speed01.isSelected())
+            settings.setTimerDuration(0.1);
+        if (_speed025.isSelected())
+            settings.setTimerDuration(0.25);
         if (_speed05.isSelected())
             settings.setTimerDuration(0.5);
         if (_speed1.isSelected())
             settings.setTimerDuration(1);
         if (_speed2.isSelected())
             settings.setTimerDuration(2);
+        if (_speed4.isSelected())
+            settings.setTimerDuration(4);
+        if (_bgBlack.isSelected())
+            settings.setBackgroundColor(Color.BLACK);
+        if (_bgWhite.isSelected())
+            settings.setBackgroundColor(Color.WHITE);
+        if (_bgRed.isSelected())
+            settings.setBackgroundColor(Color.RED);
+        if (_bgBlue.isSelected())
+            settings.setBackgroundColor(Color.BLUE);
+        if (_bgYellow.isSelected())
+            settings.setBackgroundColor(Color.YELLOW);
+        if (_bgGreen.isSelected())
+            settings.setBackgroundColor(Color.GREEN);
         controller.init(stage,settings);
         controller.setScene(stage.getScene());
     }

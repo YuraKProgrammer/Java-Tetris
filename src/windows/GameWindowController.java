@@ -5,6 +5,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -14,9 +16,12 @@ import javafx.util.Duration;
 import models.Figure;
 import models.Game;
 import models.Settings;
+import sample.Main;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class GameWindowController {
     public static final int previewSize = 5;
@@ -43,6 +48,10 @@ public class GameWindowController {
 
     private Settings settings;
 
+    private boolean isGameOn = false;
+
+    private Timeline timeline = new Timeline();
+
     private static BufferedImage createImage (int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = image.createGraphics();
@@ -54,8 +63,8 @@ public class GameWindowController {
 
     public void init(Stage stage, Settings settings) {
         this.settings=settings;
-        image = createImage( blockSize* game.getField().width, blockSize* game.getField().height, Color.black);
-        preview = createImage( blockSize* previewSize, blockSize* previewSize, Color.black);
+        image = createImage( blockSize* game.getField().width, blockSize* game.getField().height, settings.getBackgroundColor());
+        preview = createImage( blockSize* previewSize, blockSize* previewSize, settings.getBackgroundColor());
         redraw();
     }
 
@@ -63,7 +72,7 @@ public class GameWindowController {
         g= image.createGraphics();
         for (var x=0; x< game.getField().width; x++){
             for (var y=0; y< game.getField().height; y++){
-                drawBlock(x,y, true,Color.BLACK);
+                drawBlock(x,y, true,settings.getBackgroundColor());
             }
         }
         for (var x=0; x< game.getField().width; x++){
@@ -81,7 +90,7 @@ public class GameWindowController {
         var dy = (previewSize -game.getNextFigure().getHeight())/2;
         for (var x = 0; x< previewSize; x++){
             for (var y = 0; y< previewSize; y++){
-                drawBlock(x,y, true,Color.BLACK);
+                drawBlock(x,y, true,settings.getBackgroundColor());
             }
         }
         for(var y=0; y<game.getNextFigure().getHeight(); y++){
@@ -110,30 +119,40 @@ public class GameWindowController {
     public void setScene(Scene scene) {
         this.scene = scene;
         this.scene.setOnKeyPressed(actionEvent -> {
-            //  switch (actionEvent.getCode()){
-            if (actionEvent.getCode()== KeyCode.RIGHT)
-                if (game.moveRight())
+            if (isGameOn) {
+                if (actionEvent.getCode() == KeyCode.RIGHT)
+                    if (game.moveRight())
+                        redraw();
+                if (actionEvent.getCode() == KeyCode.LEFT)
+                    if (game.moveLeft())
+                        redraw();
+                if (actionEvent.getCode() == KeyCode.DOWN) {
+                    game.moveDown();
                     redraw();
-            if (actionEvent.getCode()==KeyCode.LEFT)
-                if (game.moveLeft())
-                    redraw();
-            if (actionEvent.getCode()==KeyCode.DOWN) {
-                game.moveDown();
-                redraw();
-            }
-            if (actionEvent.getCode()==KeyCode.UP) {
-                if (game.rotate())
-                    redraw();
+                }
+                if (actionEvent.getCode() == KeyCode.UP) {
+                    if (game.rotate())
+                        redraw();
+                }
             }
         });
-        Timeline timeline = new Timeline(
+        timeline = new Timeline(
                 new KeyFrame(
                         Duration.seconds(settings.getTimerDuration()),
                         ae -> {
-                            game.moveDown();
-                            redraw();
-                            redrawPreview();
-                            _score.setText(String.valueOf(game.getScore()));
+                            if (isGameOn) {
+                                game.moveDown();
+                                redraw();
+                                redrawPreview();
+                                _score.setText(String.valueOf(game.getScore()));
+                            }
+                            isGameOn=game.getField().isGameOn();
+                            if (!isGameOn){
+                                if (timeline!=null) {
+                                    timeline.stop();
+                                }
+                                showEndWindow();
+                            }
                         }
                 )
         );
@@ -141,4 +160,24 @@ public class GameWindowController {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
+
+    private void showEndWindow() {
+        try {
+            var loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(".//windows/EndWindow.fxml")));
+            var root = (Parent) loader.load();
+
+            var stage = new Stage();
+            stage.initOwner(scene.getWindow());
+            stage.setScene(new Scene(root, 400, 500));
+            stage.show();
+
+            var controller = loader.<EndWindowController>getController(); // ??????
+            controller.init(stage, game.getScore());
+            controller.setScene(stage.getScene());
+        }
+        catch (Exception e){
+            Main.showError(e);
+        }
+    }
+
 }

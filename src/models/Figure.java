@@ -24,4 +24,20 @@ public class Figure {
     }
 
     private boolean[][] blocks;
+
+    public boolean areEquals(Figure f){
+        if(f==null)
+            return false;
+        if(width!=f.width)
+            return false;
+        if(height!=f.height)
+            return false;
+        for(var x=0; x<width; x++){
+            for(var y=0; y<height; y++){
+                if(blocks[x][y]!=f.getBlock(x,y))
+                    return false;
+            }
+        }
+        return true;
+    }
 }
