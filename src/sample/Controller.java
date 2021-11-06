@@ -42,6 +42,18 @@ public class Controller {
     private RadioButton _bgYellow;
     @FXML
     private RadioButton _bgGreen;
+    @FXML
+    private RadioButton _fiBlack;
+    @FXML
+    private RadioButton _fiWhite;
+    @FXML
+    private RadioButton _fiRed;
+    @FXML
+    private RadioButton _fiBlue;
+    @FXML
+    private RadioButton _fiYellow;
+    @FXML
+    private RadioButton _fiGreen;
     Settings settings = new Settings();
 
     private Scene scene;
@@ -91,6 +103,30 @@ public class Controller {
             settings.setBackgroundColor(Color.YELLOW);
         if (_bgGreen.isSelected())
             settings.setBackgroundColor(Color.GREEN);
+        if (_fiBlack.isSelected()) {
+            settings.setFigureColor(Color.DARK_GRAY);
+            settings.setBlockColor(Color.BLACK);
+        }
+        if (_fiWhite.isSelected()) {
+            settings.setFigureColor(Color.WHITE);
+            settings.setBlockColor(new Color(150, 150, 150));
+        }
+        if (_fiRed.isSelected()) {
+            settings.setFigureColor(Color.RED);
+            settings.setBlockColor(new Color(150, 0, 0));
+        }
+        if (_fiBlue.isSelected()) {
+            settings.setFigureColor(Color.BLUE);
+            settings.setBlockColor(new Color(0, 0, 150));
+        }
+        if (_fiYellow.isSelected()) {
+            settings.setFigureColor(Color.YELLOW);
+            settings.setBlockColor(new Color(150, 150, 0));
+        }
+        if (_fiGreen.isSelected()) {
+            settings.setFigureColor(Color.GREEN);
+            settings.setBlockColor(new Color(0, 150, 0));
+        }
         controller.init(stage,settings);
         controller.setScene(stage.getScene());
     }

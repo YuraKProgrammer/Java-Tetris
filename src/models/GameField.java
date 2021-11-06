@@ -25,22 +25,30 @@ public class GameField {
 
     private boolean isGameOn = true;
 
-    public GameField(){
+    public GameField() {
+    }
+
+    public boolean[][] getValues() {
+        return values;
+    }
+
+    public void setValues(boolean[][] values) {
+        this.values = values;
     }
 
     private boolean[][] values = new boolean[width][height];
 
-    public boolean getBlock(int x,int y){
+    public boolean getBlock(int x, int y) {
         return values[x][y];
     }
 
-    private void setBlock(int x, int y, boolean value){
+    public void setBlock(int x, int y, boolean value) {
         values[x][y] = value;
     }
 
-    public boolean leftFree(Figure figure, int figureX, int figureY){
-        for (var x=0; x<figure.getWidth(); x++){
-            for (var y=0; y<figure.getHeight(); y++){
+    public boolean leftFree(Figure figure, int figureX, int figureY) {
+        for (var x = 0; x < figure.getWidth(); x++) {
+            for (var y = 0; y < figure.getHeight(); y++) {
                 if (figure.getBlock(x, y)) {
                     int y1 = y + figureY;
                     int x1 = x + figureX - 1;
@@ -54,9 +62,9 @@ public class GameField {
         return true;
     }
 
-    public boolean rightFree(Figure figure, int figureX, int figureY){
-        for (var x=0; x<figure.getWidth(); x++){
-            for (var y=0; y<figure.getHeight(); y++) {
+    public boolean rightFree(Figure figure, int figureX, int figureY) {
+        for (var x = 0; x < figure.getWidth(); x++) {
+            for (var y = 0; y < figure.getHeight(); y++) {
                 if (figure.getBlock(x, y)) {
                     int y1 = y + figureY;
                     int x1 = x + figureX + 1;
@@ -70,10 +78,10 @@ public class GameField {
         return true;
     }
 
-    public boolean downFree(Figure figure, int figureX, int figureY){
-        for (var x=0; x<figure.getWidth(); x++){
-            for (var y=0; y<figure.getHeight(); y++){
-                if (figure.getBlock(x,y)) {
+    public boolean downFree(Figure figure, int figureX, int figureY) {
+        for (var x = 0; x < figure.getWidth(); x++) {
+            for (var y = 0; y < figure.getHeight(); y++) {
+                if (figure.getBlock(x, y)) {
                     int y1 = y + figureY + 1;
                     int x1 = x + figureX;
                     if (y1 <= height) {
@@ -88,27 +96,31 @@ public class GameField {
         return true;
     }
 
-    public void add(Figure figure,int figureX, int figureY){
-        for (var x=0; x<figure.getWidth(); x++){
-            for (var y=0; y<figure.getHeight(); y++){
-                if (figure.getBlock(x,y))
-                    values[figureX+x][figureY+y]=true;
+    public void add(Figure figure, int figureX, int figureY) {
+        for (var x = 0; x < figure.getWidth(); x++) {
+            for (var y = 0; y < figure.getHeight(); y++) {
+                if (figure.getBlock(x, y))
+                    values[figureX + x][figureY + y] = true;
             }
         }
-        checkLines();
-        checkTop();
+        for (var i=0; i<=height; i++) {
+            checkLines();
+            checkTop();
+        }
     }
 
-    private void checkLines(){
-        for (var y=height-1; y>0; y--){
-            if (isLineFilled(y)){
+    public boolean checkLines() {
+        for (var y = height - 1; y > 0; y--) {
+            if (isLineFilled(y)) {
                 score++;
-                for (var n=0; n<width; n++){
-                    values[n][y]=false;
+                for (var n = 0; n < width; n++) {
+                    values[n][y] = false;
                 }
                 downField(y);
+                return true;
             }
         }
+        return false;
     }
 
     private void checkTop(){

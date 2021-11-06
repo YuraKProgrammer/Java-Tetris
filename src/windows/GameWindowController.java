@@ -20,7 +20,6 @@ import sample.Main;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Objects;
 
 public class GameWindowController {
@@ -49,6 +48,10 @@ public class GameWindowController {
     private Settings settings;
 
     private boolean isGameOn = false;
+
+    private boolean isGameStopped = false;
+
+    private Timeline pauseTime = new Timeline();
 
     private Timeline timeline = new Timeline();
 
@@ -120,22 +123,23 @@ public class GameWindowController {
         this.scene = scene;
         this.scene.setOnKeyPressed(actionEvent -> {
             if (isGameOn) {
-                if (actionEvent.getCode() == KeyCode.RIGHT)
-                    if (game.moveRight())
-                        redraw();
-                if (actionEvent.getCode() == KeyCode.LEFT)
-                    if (game.moveLeft())
-                        redraw();
-                if (actionEvent.getCode() == KeyCode.DOWN) {
-                    game.moveDown();
-                    redraw();
-                }
-                if (actionEvent.getCode() == KeyCode.UP) {
-                    if (game.rotate())
-                        redraw();
+                if (actionEvent.getCode() == KeyCode.SPACE) {
+                    isGameStopped=!isGameStopped;
                 }
             }
         });
+        pauseTime = new Timeline(
+                new KeyFrame(
+                        Duration.seconds(settings.getTimerDuration()),
+                        ae -> {
+                            this.scene.setOnKeyPressed(actionEvent -> {
+                                if (actionEvent.getCode() == KeyCode.SPACE) {
+                                    isGameStopped=false;
+                                    timeline.play();
+                                    pauseTime.stop();
+                                }
+                            });
+                        }));
         timeline = new Timeline(
                 new KeyFrame(
                         Duration.seconds(settings.getTimerDuration()),
@@ -145,25 +149,50 @@ public class GameWindowController {
                                 redraw();
                                 redrawPreview();
                                 _score.setText(String.valueOf(game.getScore()));
+                                this.scene.setOnKeyPressed(actionEvent -> {
+                                    if (actionEvent.getCode() == KeyCode.RIGHT)
+                                        if (game.moveRight())
+                                            redraw();
+                                    if (actionEvent.getCode() == KeyCode.LEFT)
+                                        if (game.moveLeft())
+                                            redraw();
+                                    if (actionEvent.getCode() == KeyCode.DOWN) {
+                                        game.moveDown();
+                                        redraw();
+                                    }
+                                    if (actionEvent.getCode() == KeyCode.UP) {
+                                        if (game.rotate())
+                                            redraw();
+                                    }
+                                    if (actionEvent.getCode() == KeyCode.SPACE) {
+                                        isGameStopped = true;
+                                    }
+                                });
                             }
-                            isGameOn=game.getField().isGameOn();
-                            if (!isGameOn){
-                                if (timeline!=null) {
+                            isGameOn = game.getField().isGameOn();
+                            if (!isGameOn) {
+                                if (timeline != null) {
                                     timeline.stop();
                                 }
                                 showEndWindow();
                             }
-                        }
-                )
-        );
+                            if (isGameStopped) {
+                                timeline.pause();
+                                pauseTime.play();
+                            }
+                        }));
         timeline.setDelay(Duration.seconds(settings.getTimerDuration()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+        if (!isGameStopped){
+            timeline.play();
+        }
     }
 
-    private void showEndWindow() {
+
+    private void showEndWindow(){ //
         try {
-            var loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(".//windows/EndWindow.fxml")));
+            var loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("../windows/EndWindow.fxml")));
             var root = (Parent) loader.load();
 
             var stage = new Stage();
@@ -171,7 +200,7 @@ public class GameWindowController {
             stage.setScene(new Scene(root, 400, 500));
             stage.show();
 
-            var controller = loader.<EndWindowController>getController(); // ??????
+            var controller = loader.<EndWindowController>getController();
             controller.init(stage, game.getScore());
             controller.setScene(stage.getScene());
         }
@@ -179,5 +208,4 @@ public class GameWindowController {
             Main.showError(e);
         }
     }
-
 }

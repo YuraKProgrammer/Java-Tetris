@@ -50,5 +50,19 @@
             <RadioButton fx:id="_bgGreen" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" text="Зелёный" toggleGroup="$tg2" />
          </children>
       </VBox>
+      <VBox prefHeight="54.0" prefWidth="114.0" GridPane.rowIndex="3">
+         <children>
+            <RadioButton fx:id="_fiBlack" mnemonicParsing="false" text="Чёрные">
+               <toggleGroup>
+                  <ToggleGroup fx:id="tg3" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="_fiWhite" mnemonicParsing="false" text="Белые" toggleGroup="$tg3" />
+            <RadioButton fx:id="_fiRed" mnemonicParsing="false" text="Красные" toggleGroup="$tg3" />
+            <RadioButton fx:id="_fiBlue" mnemonicParsing="false" text="Синие" toggleGroup="$tg3" />
+            <RadioButton fx:id="_fiYellow" mnemonicParsing="false" text="Жёлтые" toggleGroup="$tg3" />
+            <RadioButton fx:id="_fiGreen" mnemonicParsing="false" text="Зелёные" toggleGroup="$tg3" />
+         </children>
+      </VBox>
     </children>
 </GridPane>
