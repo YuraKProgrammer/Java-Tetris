@@ -12,7 +12,7 @@ public class EndWindowController {
 
     private Scene scene;
 
-    private int score=0;
+    private double score=0;
 
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -23,7 +23,7 @@ public class EndWindowController {
             Main.showError(e);
         }
     }
-    public void init(Stage stage, int score) {
+    public void init(Stage stage, double score) {
         this.score=score;
     }
 }

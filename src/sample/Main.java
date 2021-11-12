@@ -23,6 +23,7 @@ public class Main extends Application {
     }
 
     public static void showError(Exception exc) {
+        System.out.println(exc);
         var alert = new Alert(Alert.AlertType.ERROR, exc.getMessage());
         alert.showAndWait();
     }

@@ -33,10 +33,10 @@ public class Game {
 
     private Figure nextFigure;
 
-    private FigureRotator rotator = new FigureRotator();
+    private IFigureRotator rotator = new FigureRotator2();
 
     private FigureFabric fabric = new FigureFabric();
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
@@ -44,7 +44,7 @@ public class Game {
         this.score = field.score;
     }
 
-    private int score;
+    private double score;
 
     public Game(){
         currentFigure=fabric.create();
@@ -98,6 +98,14 @@ public class Game {
         if (currentFigure.getWidth()==3 && currentFigure.getHeight()%2!=0 && figureX+1+rotated.getWidth()>-1 && currentFigure!=rotated) {
             figureX = figureX + 1;
             figureY = figureY - 1;
+        }
+        if (currentFigure.getHeight()==5 && currentFigure.getWidth()%2!=0 && figureX-1+rotated.getWidth()>-1 && currentFigure!=rotated) {
+            figureX = figureX - 2;
+            figureY = figureY + 2;
+        }
+        if (currentFigure.getWidth()==5 && currentFigure.getHeight()%2!=0 && figureX+1+rotated.getWidth()>-1 && currentFigure!=rotated) {
+            figureX = figureX + 2;
+            figureY = figureY - 2;
         }
         currentFigure=rotated;
         return true;

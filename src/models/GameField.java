@@ -13,7 +13,9 @@ public class GameField {
      */
     public final int height = 20;
 
-    public int score = 0;
+    public double difficulty = 0;
+
+    public double score = 0;
 
     public boolean isGameOn() {
         return isGameOn;
@@ -112,7 +114,7 @@ public class GameField {
     public boolean checkLines() {
         for (var y = height - 1; y > 0; y--) {
             if (isLineFilled(y)) {
-                score++;
+                score=score+difficulty;
                 for (var n = 0; n < width; n++) {
                     values[n][y] = false;
                 }

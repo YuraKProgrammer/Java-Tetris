@@ -121,6 +121,7 @@ public class GameWindowController {
 
     public void setScene(Scene scene) {
         this.scene = scene;
+        game.getField().difficulty=1/settings.getTimerDuration();
         this.scene.setOnKeyPressed(actionEvent -> {
             if (isGameOn) {
                 if (actionEvent.getCode() == KeyCode.SPACE) {
