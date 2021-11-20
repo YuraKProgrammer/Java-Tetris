@@ -1,8 +1,19 @@
 package impl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import javafx.scene.Scene;
 import models.IRecordStorage;
 import models.Record;
+import sample.Main;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,45 +28,45 @@ public class UserRecordStorage implements IRecordStorage {
             list.add(o);
         }
         list.add(record);
+        save(list.toArray(new Record[0]));
+    }
+
+    private void save(Record[] records){
+        var serializer = new GsonBuilder().setPrettyPrinting().create();
+        var json = serializer.toJson(records);
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(getFileName());
+            writer.println(json);
+        }
+        catch (Exception e){
+            Main.showError(e);
+        }
+        finally {
+            if (writer!=null)
+                writer.close();
+        }
+    }
+
+    private String getFileName() {
+        //return "D:\\Школьные задания\\Программирование\\Records.json";
+        return System.getProperty("user.home")+"\\TetrisRecords.json";
     }
 
     @Override
     public Record[] load() {
-        Record r1 = new Record();
-        r1.setScore(120);
-        r1.setGameDurationSec(50);
-        r1.setDifficulty(2);
-        r1.setCountOfTurns(15);
-        Record r2 = new Record();
-        r2.setScore(100);
-        r2.setGameDurationSec(10);
-        r2.setDifficulty(1);
-        r2.setCountOfTurns(50);
-        Record r3 = new Record();
-        r3.setScore(90);
-        r3.setGameDurationSec(5);
-        r3.setDifficulty(4);
-        r3.setCountOfTurns(9);
-        Record r4 = new Record();
-        r4.setScore(87);
-        r4.setGameDurationSec(123);
-        r4.setDifficulty(0.5);
-        r4.setCountOfTurns(12);
-        Record r5 = new Record();
-        r5.setScore(50);
-        r5.setGameDurationSec(50);
-        r5.setDifficulty(1);
-        r5.setCountOfTurns(500);
-        if (r5!=null)
-            return new Record[]{r1,r2,r3,r4,r5};
-        if (r4!=null)
-            return new Record[]{r1,r2,r3,r4};
-        if (r3!=null)
-            return new Record[]{r1,r2,r3};
-        if (r2!=null)
-            return new Record[]{r1,r2};
-        if (r1!=null)
-            return new Record[]{r1};
-        return new Record[0];
+        try{
+            var file = new File(getFileName());
+            if (!file.exists())
+                return new Record[0];
+            var json = Files.readString(Path.of(getFileName()), StandardCharsets.US_ASCII);
+            var serializer = new GsonBuilder().setPrettyPrinting().create();
+            var records = serializer.fromJson(json,Record[].class);
+            return records;
+        }
+        catch (Exception e){
+            Main.showError(e);
+            return new Record[0];
+        }
     }
 }

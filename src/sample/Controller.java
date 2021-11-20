@@ -151,7 +151,7 @@ public class Controller {
         var stage = new Stage();
         stage.initOwner(scene.getWindow());
         stage.setTitle("Рекорды");
-        stage.setScene(new Scene(root, 500, 175));
+        stage.setScene(new Scene(root, 850, 175));
         stage.show();
 
         var controller = loader.<RecordsWindowController>getController();

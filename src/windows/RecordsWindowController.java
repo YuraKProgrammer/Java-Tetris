@@ -5,9 +5,11 @@ import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import models.IRecordStorage;
+import models.Record;
 import models.Settings;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class RecordsWindowController {
     @FXML
@@ -65,6 +67,10 @@ public class RecordsWindowController {
 
     public void init(Stage stage, IRecordStorage recordStorage) {
         var records =recordStorage.load();
+        records = Arrays
+                .stream(records)
+                .sorted((r1,r2)->Double.compare(r2.getScore(),r1.getScore()))
+                .toArray(Record[]::new);
         if (records.length>0) {
             _score1.setText("Счёт:"+records[0].getScore());
             _duration1.setText("Время(сек):"+records[0].getGameDurationSec());
