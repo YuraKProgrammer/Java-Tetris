@@ -55,6 +55,8 @@ public class GameWindowController {
 
     private Timeline timeline = new Timeline();
 
+    private int rotates=0;
+
     private static BufferedImage createImage (int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = image.createGraphics();
@@ -162,8 +164,10 @@ public class GameWindowController {
                                         redraw();
                                     }
                                     if (actionEvent.getCode() == KeyCode.UP) {
-                                        if (game.rotate())
+                                        if (game.rotate()) {
                                             redraw();
+                                            rotates++;
+                                        }
                                     }
                                     if (actionEvent.getCode() == KeyCode.SPACE) {
                                         isGameStopped = true;
@@ -175,7 +179,13 @@ public class GameWindowController {
                                 if (timeline != null) {
                                     timeline.stop();
                                 }
-                                showEndWindow();
+                                try {
+                                    game.end(rotates);
+                                    showEndWindow();
+                                }
+                                catch (Exception e){
+                                    Main.showError(e);
+                                }
                             }
                             if (isGameStopped) {
                                 timeline.pause();
@@ -198,6 +208,7 @@ public class GameWindowController {
 
             var stage = new Stage();
             stage.initOwner(scene.getWindow());
+            stage.setTitle("КОНЕЦ");
             stage.setScene(new Scene(root, 400, 500));
             stage.show();
 

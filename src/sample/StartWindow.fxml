@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -21,7 +22,6 @@
       <RowConstraints />
     </rowConstraints>
     <children>
-        <Button fx:id="_start" mnemonicParsing="false" text="Start" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
       <VBox prefHeight="71.0" prefWidth="135.0">
          <children>
             <RadioButton fx:id="_speed4" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Очень медленно">
@@ -62,6 +62,20 @@
             <RadioButton fx:id="_fiBlue" mnemonicParsing="false" text="Синие" toggleGroup="$tg3" />
             <RadioButton fx:id="_fiYellow" mnemonicParsing="false" text="Жёлтые" toggleGroup="$tg3" />
             <RadioButton fx:id="_fiGreen" mnemonicParsing="false" text="Зелёные" toggleGroup="$tg3" />
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <children>
+              <Button fx:id="_start" mnemonicParsing="false" text="Начать...">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="_records" alignment="CENTER" mnemonicParsing="false" text="Рекорды..." textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
     </children>

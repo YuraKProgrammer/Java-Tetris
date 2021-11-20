@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         var loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("StartWindow.fxml")));
         var root = (Parent)loader.load();
-        primaryStage.setTitle("Tetris");
+        primaryStage.setTitle("Тетрис");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
         var controller = loader.<Controller>getController();

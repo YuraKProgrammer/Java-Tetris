@@ -1,8 +1,11 @@
 package models;
 
-import sample.Main;
+import impl.UserRecordStorage;
+import javafx.util.Duration;
 
+import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Game {
     public GameField getField() {
@@ -25,6 +28,8 @@ public class Game {
 
     private GameField field = new GameField();
 
+    private IRecordStorage recordStorage = new UserRecordStorage();
+
     public void setCurrentFigure(Figure currentFigure) {
         this.currentFigure = currentFigure;
     }
@@ -46,10 +51,13 @@ public class Game {
 
     private double score;
 
+    private Date startTime;
+
     public Game(){
         currentFigure=fabric.create();
         figureX=random.nextInt(field.width-currentFigure.getWidth()+1);
         nextFigure=fabric.create();
+        startTime=new Date();
     }
 
     public Figure getCurrentFigure(){
@@ -109,5 +117,24 @@ public class Game {
         }
         currentFigure=rotated;
         return true;
+    }
+
+    /**
+     * Длительность игры
+     * @return
+     */
+    public Duration getDuration(){
+        var diff = new Date().getTime()-startTime.getTime();
+        return Duration.millis(diff);
+    }
+
+    public void end(int rotates){
+        Record record = new Record();
+        record.setCountOfTurns(rotates);
+        record.setDifficulty(field.difficulty);
+        record.setGameDurationSec((int)getDuration().toSeconds());
+        record.setGameTime(new Date());
+        record.setScore(score);
+        recordStorage.add(record);
     }
 }

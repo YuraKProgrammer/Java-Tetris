@@ -1,5 +1,6 @@
 package sample;
 
+import impl.UserRecordStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +11,7 @@ import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 import models.Settings;
 import windows.GameWindowController;
+import windows.RecordsWindowController;
 
 import java.awt.*;
 import java.io.IOException;
@@ -18,6 +20,8 @@ import java.util.Objects;
 public class Controller {
     @FXML
     private Button _start;
+    @FXML
+    private Button _records;
     @FXML
     private RadioButton _speed01;
     @FXML
@@ -67,6 +71,14 @@ public class Controller {
                 Main.showError(e);
             }
         });
+        _records.setOnAction(actionEvent -> {
+            try {
+                showRecordsWindow();
+            }
+            catch (Exception e){
+                Main.showError(e);
+            }
+        });
     }
 
     private void showGameWindow() throws IOException {
@@ -75,6 +87,7 @@ public class Controller {
 
         var stage = new Stage();
         stage.initOwner(scene.getWindow());
+        stage.setTitle("Тетрис");
         stage.setScene(new Scene(root, 400, 500));
         stage.show();
 
@@ -128,6 +141,22 @@ public class Controller {
             settings.setBlockColor(new Color(0, 150, 0));
         }
         controller.init(stage,settings);
+        controller.setScene(stage.getScene());
+    }
+
+    private void showRecordsWindow() throws IOException {
+        var loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("../windows/RecordsWindow.fxml")));
+        var root = (Parent)loader.load();
+
+        var stage = new Stage();
+        stage.initOwner(scene.getWindow());
+        stage.setTitle("Рекорды");
+        stage.setScene(new Scene(root, 500, 175));
+        stage.show();
+
+        var controller = loader.<RecordsWindowController>getController();
+
+        controller.init(stage,new UserRecordStorage());
         controller.setScene(stage.getScene());
     }
 }
