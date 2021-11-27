@@ -9,6 +9,8 @@ import models.Record;
 import models.Settings;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class RecordsWindowController {
@@ -72,39 +74,62 @@ public class RecordsWindowController {
                 .sorted((r1,r2)->Double.compare(r2.getScore(),r1.getScore()))
                 .toArray(Record[]::new);
         if (records.length>0) {
-            _score1.setText("Счёт:"+records[0].getScore());
-            _duration1.setText("Время(сек):"+records[0].getGameDurationSec());
-            _time1.setText(String.valueOf(records[0].getGameTime()));
-            _difficulty1.setText(String.valueOf(records[0].getDifficulty()));
-            _countOfTurns1.setText("Повороты:"+records[0].getCountOfTurns());
+            Record r0 = records[0];
+            _score1.setText("Счёт:"+ r0.getScore());
+            _duration1.setText("Время(сек):"+ r0.getGameDurationSec());
+            _time1.setText(dateToString(r0.getGameTime()));
+            _difficulty1.setText("Сложность:"+ r0.getDifficulty());
+            _countOfTurns1.setText("Повороты:"+ r0.getCountOfTurns());
         }
         if (records.length>1){
-            _score2.setText("Счёт:"+records[1].getScore());
-            _duration2.setText("Время(сек):"+records[1].getGameDurationSec());
-            _time2.setText(String.valueOf(records[1].getGameTime()));
-            _difficulty2.setText(String.valueOf(records[1].getDifficulty()));
-            _countOfTurns2.setText("Повороты:"+records[1].getCountOfTurns());
+            Record r1 = records[1];
+            _score2.setText("Счёт:"+ r1.getScore());
+            _duration2.setText("Время(сек):"+ r1.getGameDurationSec());
+            _time2.setText(dateToString(r1.getGameTime()));
+            _difficulty2.setText("Сложность:"+ r1.getDifficulty());
+            _countOfTurns2.setText("Повороты:"+ r1.getCountOfTurns());
         }
         if (records.length>2){
-            _score3.setText("Счёт:"+records[2].getScore());
-            _duration3.setText("Время(сек):"+records[2].getGameDurationSec());
-            _time3.setText(String.valueOf(records[2].getGameTime()));
-            _difficulty3.setText(String.valueOf(records[2].getDifficulty()));
-            _countOfTurns3.setText("Повороты:"+records[2].getCountOfTurns());
+            Record r2 = records[2];
+            _score3.setText("Счёт:"+ r2.getScore());
+            _duration3.setText("Время(сек):"+ r2.getGameDurationSec());
+            _time3.setText(dateToString(r2.getGameTime()));
+            _difficulty3.setText("Сложность:"+ r2.getDifficulty());
+            _countOfTurns3.setText("Повороты:"+ r2.getCountOfTurns());
         }
         if (records.length>3){
-            _score4.setText("Счёт:"+records[3].getScore());
-            _duration4.setText("Время(сек):"+records[3].getGameDurationSec());
-            _time4.setText(String.valueOf(records[3].getGameTime()));
-            _difficulty4.setText(String.valueOf(records[3].getDifficulty()));
-            _countOfTurns4.setText("Повороты:"+records[3].getCountOfTurns());
+            Record r3 = records[3];
+            _score4.setText("Счёт:"+ r3.getScore());
+            _duration4.setText("Время(сек):"+ r3.getGameDurationSec());
+            _time4.setText(dateToString(r3.getGameTime()));
+            _difficulty4.setText("Сложность:"+ r3.getDifficulty());
+            _countOfTurns4.setText("Повороты:"+ r3.getCountOfTurns());
         }
         if (records.length>4){
-            _score5.setText("Счёт:"+records[4].getScore());
-            _duration5.setText("Время(сек):"+records[4].getGameDurationSec());
-            _time5.setText(String.valueOf(records[4].getGameTime()));
-            _difficulty5.setText(String.valueOf(records[4].getDifficulty()));
-            _countOfTurns5.setText("Повороты:"+records[4].getCountOfTurns());
+            Record r4 = records[4];
+            _score5.setText("Счёт:"+ r4.getScore());
+            _duration5.setText("Время(сек):"+ r4.getGameDurationSec());
+            _time5.setText(dateToString(r4.getGameTime()));
+            _difficulty5.setText("Сложность:"+ r4.getDifficulty());
+            _countOfTurns5.setText("Повороты:"+ r4.getCountOfTurns());
+        }
+    }
+
+    public static String dateToString(Date date) {
+        Calendar now = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int year = now.get(Calendar.YEAR);
+        int month = now.get(Calendar.MONTH)+1;
+        int day = now.get(Calendar.DAY_OF_MONTH);
+        int year1 = c.get(Calendar.YEAR);
+        int month1 = c.get(Calendar.MONTH)+1;
+        int day1 = c.get(Calendar.DAY_OF_MONTH);
+        if (year == year1 && month == month1 && day == day1) {
+            return intToString(c.get(Calendar.HOUR))+":"+intToString(c.get(Calendar.MINUTE));
+        }
+        else{
+            return intToString(day1)+"."+intToString(month1)+"."+year1;
         }
     }
 
@@ -112,5 +137,11 @@ public class RecordsWindowController {
         this.scene = scene;
     }
 
+    private static String intToString(int i){
+        if (i<10)
+            return "0"+i;
+        else
+            return String.valueOf(i);
+    }
 
 }

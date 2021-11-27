@@ -9,6 +9,10 @@ public class Record {
     private int gameDurationSec;
     private int countOfTurns;
 
+    /**
+     * Время окончания игры
+     * @return
+     */
     public Date getGameTime() {
         return gameTime;
     }

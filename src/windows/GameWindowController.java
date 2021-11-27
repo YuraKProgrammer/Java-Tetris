@@ -55,7 +55,7 @@ public class GameWindowController {
 
     private Timeline timeline = new Timeline();
 
-    private int rotates=0;
+    private int rotateCount =0;
 
     private static BufferedImage createImage (int width, int height, Color color) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
@@ -166,7 +166,7 @@ public class GameWindowController {
                                     if (actionEvent.getCode() == KeyCode.UP) {
                                         if (game.rotate()) {
                                             redraw();
-                                            rotates++;
+                                            rotateCount++;
                                         }
                                     }
                                     if (actionEvent.getCode() == KeyCode.SPACE) {
@@ -180,7 +180,7 @@ public class GameWindowController {
                                     timeline.stop();
                                 }
                                 try {
-                                    game.end(rotates);
+                                    game.end(rotateCount);
                                     showEndWindow();
                                 }
                                 catch (Exception e){
